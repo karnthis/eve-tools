@@ -23,13 +23,25 @@
                 width="100"
             />
         </div>
-
-
-        <v-btn to="/" text>
-            <span class="mr-2">Herm</span>
-<!--            <v-icon>mdi-open-in-new</v-icon>-->
-        </v-btn>
         <v-spacer></v-spacer>
+        <v-btn to="/about" text>
+            <span class="mr-2">About</span>
+        </v-btn>
+        <v-btn to="/ammo" text>
+            <span class="mr-2">Ammo</span>
+        </v-btn>
+        <v-btn to="/modules" text>
+            <span class="mr-2">Modules</span>
+        </v-btn>
+        <v-btn to="/reactions" text>
+            <span class="mr-2">Reactions</span>
+        </v-btn>
+        <v-btn to="/ships" text>
+            <span class="mr-2">Ships</span>
+        </v-btn>
+<!--        <v-btn to="/" text>-->
+<!--            <span class="mr-2">Modules</span>-->
+<!--        </v-btn>-->
 
     </v-app-bar>
 </template>

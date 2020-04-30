@@ -14,7 +14,6 @@
                         :rules="fuelCountRules"
                         label="Desired Fuel Count"
                         filled
-                        autofocus
                         required
                 ></v-text-field>
               </v-col>
@@ -30,24 +29,18 @@
                         required
                 ></v-select>
               </v-col>
-
-
-
-
-
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="2">
                 <v-select
-                        v-model="selectedMineralEfficiency"
-                        :items="mineralEfficiencyOptions"
-                        :rules="mineralEfficiencyRules"
+                        v-model="selectedMaterialEfficiency"
+                        :items="materialEfficiencyOptions"
+                        :rules="materialEfficiencyRules"
                         label="ME"
                         filled
                         required
                 ></v-select>
               </v-col>
-
               <v-col cols="12" sm="12" md="2">
                 <v-select
                         v-model="selectedTimeEfficiency"
@@ -68,7 +61,6 @@
               >
                 Process
               </v-btn>
-
               <v-btn
                       color="error"
                       class="mr-4"
@@ -76,7 +68,6 @@
               >
                 Reset Form
               </v-btn>
-
             </v-row>
           </v-container>
         </v-form>
@@ -111,11 +102,13 @@
           <v-row>
             {{ selectedIsotope }} Isotopes : {{ calculatedNumbers.isotopes }}
           </v-row>
+          <v-row>
+            Run Time : {{ calculatedRunTime }}
+          </v-row>
         </v-container>
-
       </v-col>
-    </v-row>
 
+    </v-row>
   </container>
 </template>
 
@@ -126,22 +119,22 @@
   export default {
     name: 'Reactions',
     data: () => ({
-      valid: true,
-      selectedIsotope: null,
+      valid: false,
+      fuelCount: null,
+      fuelAdjusted: null,
+      fuelCountRules: [
+        v => !!v || 'Target Fuel Count is required',
+        v => Number(v) || 'Target Fuel Count must be a number!'
+      ],
+      selectedIsotope: 'Generic',
       isotopeRules: [
-        v => !!v || 'Isotope is required',
+        v => !!v || 'Isotope Type is required',
       ],
       isotopes: [
         'Helium',
         'Hydrogen',
         'Nitrogen',
         'Oxygen',
-      ],
-      fuelCount: '',
-      fuelAdjusted: null,
-      fuelCountRules: [
-        v => !!v || 'Target Fuel is required',
-        v => Number(v) || 'Target Fuel must be a number!'
       ],
       baseNumbers: {
         robotics: 1,
@@ -154,22 +147,33 @@
         liquidOzone: 350,
         isotopes: 450,
       },
+      // calculatedNumbers: {
+      //   robotics: 0,
+      //   enrichedUranium: 0,
+      //   mechanicalParts: 0,
+      //   coolant: 0,
+      //   strontiumClathrates: 0,
+      //   oxygen: 0,
+      //   heavyWater: 0,
+      //   liquidOzone: 0,
+      //   isotopes: 0,
+      // },
       calculatedNumbers: {
-        robotics: 0,
-        enrichedUranium: 0,
-        mechanicalParts: 0,
-        coolant: 0,
-        strontiumClathrates: 0,
-        oxygen: 0,
-        heavyWater: 0,
-        liquidOzone: 0,
-        isotopes: 0,
+        robotics: null,
+        enrichedUranium: null,
+        mechanicalParts: null,
+        coolant: null,
+        strontiumClathrates: null,
+        oxygen: null,
+        heavyWater: null,
+        liquidOzone: null,
+        isotopes: null,
       },
-      selectedMineralEfficiency: null,
-      mineralEfficiencyRules: [
+      selectedMaterialEfficiency: null,
+      materialEfficiencyRules: [
         v => Number.isInteger(Number(v)) || 'ME is required',
       ],
-      mineralEfficiencyOptions: [
+      materialEfficiencyOptions: [
         0,
         1,
         2,
@@ -182,7 +186,6 @@
         9,
         10
       ],
-
       selectedTimeEfficiency: null,
       timeEfficiencyRules: [
         v => Number.isInteger(Number(v)) || 'TE is required',
@@ -199,10 +202,9 @@
         16,
         18,
         20
-      ]
-
-
-
+      ],
+      calculatedRunTime: null,
+      baseRunTime: 900, // 15 minutes in seconds
     }),
     components: {
 
@@ -218,14 +220,27 @@
         this.$refs.form.resetValidation()
       },
       processForm() {
-        alert(this.validate())
+        // alert(this.validate())
         if (this.validate()) {
           this.fuelAdjusted = Math.ceil(this.fuelCount / 40)
           Object.keys(this.baseNumbers).forEach(key => {
-            this.calculatedNumbers[key] = Math.ceil((this.fuelAdjusted * this.baseNumbers[key]) * ((100 - Number(this.selectedMineralEfficiency))/ 100))
+            this.calculatedNumbers[key] = Math.ceil((this.fuelAdjusted * this.baseNumbers[key]) * this.getPercentage(this.selectedMaterialEfficiency))
           })
+          this.calculatedRunTime = this.beautifyTime(Math.ceil((this.fuelAdjusted * this.baseRunTime) * this.getPercentage(this.selectedTimeEfficiency)))
         }
-      }
+      },
+      getPercentage(value) {
+        return ((100 - Number(value)) / 100)
+      },
+      beautifyTime(time) {
+        alert(time)
+        const days = ~~(time / 86400)
+        const hours = ~~((time % 86400) / 3600)
+        const minutes = ~~((time % 3600) / 60)
+        const seconds = ~~(time % 60)
+
+        return `${days}:${hours}:${minutes}:${seconds}`
+      },
     },
   }
 </script>
