@@ -4,68 +4,66 @@
     <v-row>
       <v-col cols="12" sm="12" md="6">
         <v-form
-                ref="form"
-                v-model="valid">
+          ref="form"
+          v-model="valid">
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="4">
                 <v-text-field
-                        v-model="fuelCount"
-                        :rules="fuelCountRules"
-                        label="Desired Fuel Count"
-                        filled
-                        required
+                  v-model="fuelCount"
+                  :rules="fuelCountRules"
+                  label="Desired Fuel Count"
+                  filled
+                  required
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="4">
                 <v-select
-                        v-model="selectedIsotope"
-                        :items="isotopes"
-                        :rules="isotopeRules"
-                        label="Isotope"
-                        filled
-                        required
+                  v-model="selectedIsotope"
+                  :items="isotopes"
+                  :rules="isotopeRules"
+                  label="Isotope"
+                  filled
+                  required
                 ></v-select>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="2">
                 <v-select
-                        v-model="selectedMaterialEfficiency"
-                        :items="materialEfficiencyOptions"
-                        :rules="materialEfficiencyRules"
-                        label="ME"
-                        filled
-                        required
+                  v-model="selectedMaterialEfficiency"
+                  :items="materialEfficiencyOptions"
+                  :rules="materialEfficiencyRules"
+                  label="ME"
+                  filled
+                  required
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="12" md="2">
                 <v-select
-                        v-model="selectedTimeEfficiency"
-                        :items="timeEfficiencyOptions"
-                        :rules="timeEfficiencyRules"
-                        label="TE"
-                        filled
-                        required
+                  v-model="selectedTimeEfficiency"
+                  :items="timeEfficiencyOptions"
+                  :rules="timeEfficiencyRules"
+                  label="TE"
+                  filled
+                  required
                 ></v-select>
               </v-col>
             </v-row>
             <v-row>
               <v-btn
-                      :disabled="!valid"
-                      color="success"
-                      class="mr-4"
-                      @click="processForm"
-              >
+                :disabled="!valid"
+                color="success"
+                class="mr-4"
+                @click="processForm">
                 Process
               </v-btn>
               <v-btn
-                      color="error"
-                      class="mr-4"
-                      @click="reset"
-              >
+                color="error"
+                class="mr-4"
+                @click="reset">
                 Reset Form
               </v-btn>
             </v-row>
@@ -103,7 +101,10 @@
             {{ selectedIsotope }} Isotopes : {{ calculatedNumbers.isotopes }}
           </v-row>
           <v-row>
-            Run Time : {{ calculatedRunTime }}
+            Total Run Time : {{ calculatedRunTime }}
+          </v-row>
+          <v-row>
+            Actual Units : {{ actualUnits }}
           </v-row>
         </v-container>
       </v-col>
@@ -205,6 +206,7 @@
       ],
       calculatedRunTime: null,
       baseRunTime: 900, // 15 minutes in seconds
+      actualUnits: null,
     }),
     components: {
 
@@ -220,20 +222,22 @@
         this.$refs.form.resetValidation()
       },
       processForm() {
-        // alert(this.validate())
         if (this.validate()) {
           this.fuelAdjusted = Math.ceil(this.fuelCount / 40)
           Object.keys(this.baseNumbers).forEach(key => {
-            this.calculatedNumbers[key] = Math.ceil((this.fuelAdjusted * this.baseNumbers[key]) * this.getPercentage(this.selectedMaterialEfficiency))
+            this.calculatedNumbers[key] = this.beautifyNumber(Math.ceil((this.fuelAdjusted * this.baseNumbers[key]) * this.getPercentage(this.selectedMaterialEfficiency)))
           })
           this.calculatedRunTime = this.beautifyTime(Math.ceil((this.fuelAdjusted * this.baseRunTime) * this.getPercentage(this.selectedTimeEfficiency)))
         }
+        this.actualUnits = 40 * this.fuelAdjusted
       },
       getPercentage(value) {
         return ((100 - Number(value)) / 100)
       },
+      beautifyNumber(num) {
+        return new Number(num).toLocaleString('en-US', {minimumFractionDigits: 0})
+      },
       beautifyTime(time) {
-        alert(time)
         const days = ~~(time / 86400)
         const hours = ~~((time % 86400) / 3600)
         const minutes = ~~((time % 3600) / 60)
