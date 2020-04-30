@@ -25,10 +25,7 @@
         </div>
 
 
-        <v-btn
-            to="/"
-            text
-        >
+        <v-btn to="/" text>
             <span class="mr-2">Herm</span>
 <!--            <v-icon>mdi-open-in-new</v-icon>-->
         </v-btn>
