@@ -1,6 +1,6 @@
 <template>
-  <container class="reactionsroot">
-    <h1>Reactions</h1>
+  <container class="alchemy">
+    <h1>Alchemy</h1>
     <ReactionHeader/>
   </container>
 </template>
@@ -9,7 +9,7 @@
   import ReactionHeader from "@/components/ReactionHeader";
 
   export default {
-    name: 'ReactionsRoot',
+    name: 'Alchemy',
 
     components: {
       ReactionHeader,
@@ -20,4 +20,3 @@
     }),
   };
 </script>
-

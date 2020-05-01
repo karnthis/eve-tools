@@ -1,6 +1,6 @@
 <template>
-  <container class="ships">
-    <h1>Ships</h1>
+  <container class="t1ships">
+    <h1>Tech I Ships</h1>
     <ShipHeader/>
   </container>
 </template>
@@ -9,7 +9,7 @@
   import ShipHeader from "@/components/ShipHeader";
 
   export default {
-    name: 'App',
+    name: 'T1Ships',
 
     components: {
       ShipHeader,
@@ -20,4 +20,3 @@
     }),
   };
 </script>
-

@@ -1,5 +1,5 @@
 <template>
-  <container class="reactionsroot">
+  <container class="reactions">
     <h1>Reactions</h1>
     <ReactionHeader/>
   </container>
@@ -9,7 +9,7 @@
   import ReactionHeader from "@/components/ReactionHeader";
 
   export default {
-    name: 'ReactionsRoot',
+    name: 'Reactions',
 
     components: {
       ReactionHeader,
@@ -20,4 +20,3 @@
     }),
   };
 </script>
-
