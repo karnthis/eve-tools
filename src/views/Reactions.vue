@@ -1,5 +1,5 @@
 <template>
-  <container class="reactions">
+  <v-container class="reactions">
     <h1>Reactions</h1>
     <v-row>
       <v-col cols="12" sm="12" md="6">
@@ -72,36 +72,26 @@
       </v-col>
 
       <v-col>
+        <v-container v-for="item in partsData" :key="item.id">
+          <v-row>
+            {{ item.name }} : {{ item.finalCount }}
+          </v-row>
+          <v-row>
+            Price Per : {{ item.buyPrice }}
+          </v-row>
+          <v-row>
+            <v-switch
+                    v-model="item.useBuy"
+                    :label="`Use Buy Price: ${item.useBuy.toString()}`"
+            ></v-switch>
+          </v-row>
+        </v-container>
         <v-container>
           <v-row>
-            Robotics : {{ calculatedNumbers.robotics }}
-          </v-row>
-          <v-row>
-            Enriched Uranium : {{ calculatedNumbers.enrichedUranium }}
-          </v-row>
-          <v-row>
-            Mechanical Parts : {{ calculatedNumbers.mechanicalParts }}
-          </v-row>
-          <v-row>
-            Coolant : {{ calculatedNumbers.coolant }}
-          </v-row>
-          <v-row>
-            Strontium Clathrates : {{ calculatedNumbers.strontiumClathrates }}
-          </v-row>
-          <v-row>
-            Oxygen : {{ calculatedNumbers.oxygen }}
-          </v-row>
-          <v-row>
-            Heavy Water : {{ calculatedNumbers.heavyWater }}
-          </v-row>
-          <v-row>
-            Liquid Ozone : {{ calculatedNumbers.liquidOzone }}
-          </v-row>
-          <v-row>
-            {{ selectedIsotope }} Isotopes : {{ calculatedNumbers.isotopes }}
-          </v-row>
-          <v-row>
             Total Run Time : {{ calculatedRunTime }}
+          </v-row>
+          <v-row>
+            Total Cost : {{ price }}
           </v-row>
           <v-row>
             Actual Units : {{ actualUnits }}
@@ -110,7 +100,7 @@
       </v-col>
 
     </v-row>
-  </container>
+  </v-container>
 </template>
 
 <script>
@@ -120,12 +110,13 @@
   export default {
     name: 'Reactions',
     data: () => ({
+      price: 'disregard',
       valid: false,
       fuelCount: null,
       fuelAdjusted: null,
       fuelCountRules: [
         v => !!v || 'Target Fuel Count is required',
-        v => Number(v) || 'Target Fuel Count must be a number!'
+        v => Number.isInteger(Number(v)) || 'Target Fuel Count must be a number!'
       ],
       selectedIsotope: 'Generic',
       isotopeRules: [
@@ -137,38 +128,88 @@
         'Nitrogen',
         'Oxygen',
       ],
-      baseNumbers: {
-        robotics: 1,
-        enrichedUranium: 4,
-        mechanicalParts: 4,
-        coolant: 9,
-        strontiumClathrates: 20,
-        oxygen: 22,
-        heavyWater: 170,
-        liquidOzone: 350,
-        isotopes: 450,
-      },
-      // calculatedNumbers: {
-      //   robotics: 0,
-      //   enrichedUranium: 0,
-      //   mechanicalParts: 0,
-      //   coolant: 0,
-      //   strontiumClathrates: 0,
-      //   oxygen: 0,
-      //   heavyWater: 0,
-      //   liquidOzone: 0,
-      //   isotopes: 0,
-      // },
-      calculatedNumbers: {
-        robotics: null,
-        enrichedUranium: null,
-        mechanicalParts: null,
-        coolant: null,
-        strontiumClathrates: null,
-        oxygen: null,
-        heavyWater: null,
-        liquidOzone: null,
-        isotopes: null,
+      partsData: {
+        9848: {
+          name: 'Robotics',
+          baseCount: 1,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
+        44: {
+          name: 'Enriched Uranium',
+          baseCount: 4,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
+        3689: {
+          name: 'Mechanical Parts',
+          baseCount: 4,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
+        9832: {
+          name: 'Coolant',
+          baseCount: 9,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
+        16275: {
+          name: 'Strontium Clathrates',
+          baseCount: 20,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
+        3683: {
+          name: 'Oxygen',
+          baseCount: 22,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
+        16272: {
+          name: 'Heavy Water',
+          baseCount: 170,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
+        16273: {
+          name: 'Liquid Ozone',
+          baseCount: 350,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
+        "A": {
+          name: 'Isotopes',
+          baseCount: 450,
+          finalCount: null,
+          buyPrice: null,
+          sellPrice: null,
+          itemTotal: null,
+          useBuy: true,
+        },
       },
       selectedMaterialEfficiency: null,
       materialEfficiencyRules: [
@@ -211,6 +252,9 @@
     components: {
 
     },
+    computed: {
+
+    },
     methods: {
       validate () {
         return this.$refs.form.validate()
@@ -218,18 +262,59 @@
       reset () {
         this.$refs.form.reset()
       },
-      resetValidation () {
-        this.$refs.form.resetValidation()
+      // resetValidation () {
+      //   this.$refs.form.resetValidation()
+      // },
+      totalCost: function() {
+        const myData = Object.values(this.partsData)
+        // console.dir(myData)
+        // myData[0];
+        const myResult = myData.reduce((prev, curr) =>{
+          return prev + Number(curr.itemTotal)
+        }, 0)
+        // console.log(myResult)
+        return myResult
       },
       processForm() {
         if (this.validate()) {
-          this.fuelAdjusted = Math.ceil(this.fuelCount / 40)
-          Object.keys(this.baseNumbers).forEach(key => {
-            this.calculatedNumbers[key] = this.beautifyNumber(Math.ceil((this.fuelAdjusted * this.baseNumbers[key]) * this.getPercentage(this.selectedMaterialEfficiency)))
+          const fuelAdjusted = Math.ceil(this.fuelCount / 40)
+
+          Object.keys(this.partsData).forEach(key => {
+            this.partsData[key].finalCount = this.beautifyNumber(Math.ceil((fuelAdjusted * this.partsData[key].baseCount) * this.getPercentage(this.selectedMaterialEfficiency)))
           })
-          this.calculatedRunTime = this.beautifyTime(Math.ceil((this.fuelAdjusted * this.baseRunTime) * this.getPercentage(this.selectedTimeEfficiency)))
+          this.calculatedRunTime = this.beautifyTime(Math.ceil((fuelAdjusted * this.baseRunTime) * this.getPercentage(this.selectedTimeEfficiency)))
+          this.actualUnits = 40 * fuelAdjusted
+          this.fetchPrices(Object.keys(this.partsData), 30000142)
+          .then((resp) => {
+            for (const element in resp) {
+              this.partsData[resp[element].itemId].buyPrice = resp[element].buy.max
+              this.partsData[resp[element].itemId].sellPrice = resp[element].sell.min
+              console.dir(resp[element])
+              if (resp[element].useBuy) {
+                this.partsData[resp[element].itemId].itemTotal = (Number(resp[element].buy.max) * Number(resp[element].finalCount))
+              } else {
+                this.partsData[resp[element].itemId].itemTotal = (Number(resp[element].sell.min) * Number(resp[element].finalCount))
+              }
+              console.dir(resp[element])
+              console.dir(this.partsData)
+            }
+            this.price = this.totalCost()
+          })
         }
-        this.actualUnits = 40 * this.fuelAdjusted
+      },
+      async fetchPrices(itemIdArray, marketSystem) {
+        const key = 6
+        const url = `https://api.squirrellogic.com/marketer/${marketSystem}/?key=${key}`
+        const data = await fetch(url, {
+          method: 'POST',
+          mode: 'cors',
+          body: JSON.stringify({itemIdArray})
+        })
+        .then(resp => resp.json())
+        // .then(resp => {console.dir(resp)})
+        // .then(resp => resp)
+        // console.dir(data)
+        return data
       },
       getPercentage(value) {
         return ((100 - Number(value)) / 100)
