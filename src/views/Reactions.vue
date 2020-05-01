@@ -74,10 +74,10 @@
       <v-col>
         <v-container v-for="item in partsData" :key="item.id">
           <v-row>
-            {{ item.name }} : {{ item.finalCount }}
+            {{ item.name }} : {{ beautifyNumber(item.finalCount) }}
           </v-row>
           <v-row>
-            Price Per : {{ item.buyPrice }}
+            Price Per : {{ beautifyNumber(item.priceUsed) }}
           </v-row>
           <v-row>
             <v-switch
@@ -91,10 +91,10 @@
             Total Run Time : {{ calculatedRunTime }}
           </v-row>
           <v-row>
-            Total Cost : {{ price }}
+            Total Cost : {{ beautifyNumber(price) }}
           </v-row>
           <v-row>
-            Actual Units : {{ actualUnits }}
+            Actual Units : {{ beautifyNumber(actualUnits) }}
           </v-row>
         </v-container>
       </v-col>
@@ -135,6 +135,7 @@
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
@@ -144,6 +145,7 @@
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
@@ -153,6 +155,7 @@
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
@@ -162,6 +165,7 @@
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
@@ -171,6 +175,7 @@
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
@@ -180,6 +185,7 @@
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
@@ -189,6 +195,7 @@
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
@@ -198,15 +205,17 @@
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
-        "A": {
+        A: {
           name: 'Isotopes',
           baseCount: 450,
           finalCount: null,
           buyPrice: null,
           sellPrice: null,
+          priceUsed: null,
           itemTotal: null,
           useBuy: true,
         },
@@ -266,8 +275,10 @@
       //   this.$refs.form.resetValidation()
       // },
       totalCost: function() {
-        const myData = Object.values(this.partsData)
-        // console.dir(myData)
+        const {A, ...toUse} = this.partsData
+        console.log(A)
+        const myData = Object.values(toUse)
+        console.dir(myData)
         // myData[0];
         const myResult = myData.reduce((prev, curr) =>{
           return prev + Number(curr.itemTotal)
@@ -280,23 +291,30 @@
           const fuelAdjusted = Math.ceil(this.fuelCount / 40)
 
           Object.keys(this.partsData).forEach(key => {
-            this.partsData[key].finalCount = this.beautifyNumber(Math.ceil((fuelAdjusted * this.partsData[key].baseCount) * this.getPercentage(this.selectedMaterialEfficiency)))
+            this.partsData[key].finalCount = (Math.ceil((fuelAdjusted * this.partsData[key].baseCount) * this.getPercentage(this.selectedMaterialEfficiency)))
           })
           this.calculatedRunTime = this.beautifyTime(Math.ceil((fuelAdjusted * this.baseRunTime) * this.getPercentage(this.selectedTimeEfficiency)))
           this.actualUnits = 40 * fuelAdjusted
           this.fetchPrices(Object.keys(this.partsData), 30000142)
           .then((resp) => {
             for (const element in resp) {
-              this.partsData[resp[element].itemId].buyPrice = resp[element].buy.max
-              this.partsData[resp[element].itemId].sellPrice = resp[element].sell.min
+              const workingChunk = this.partsData[resp[element].itemId]
+              workingChunk.buyPrice = resp[element].buy.max
+              workingChunk.sellPrice = resp[element].sell.min
+              console.dir('workingChunk')
+              console.dir(workingChunk)
+              console.dir('resp[element]')
               console.dir(resp[element])
-              if (resp[element].useBuy) {
-                this.partsData[resp[element].itemId].itemTotal = (Number(resp[element].buy.max) * Number(resp[element].finalCount))
+              console.dir(typeof workingChunk.useBuy)
+              if (workingChunk.useBuy) {
+                workingChunk.itemTotal = (Number(workingChunk.buyPrice) * Number(workingChunk.finalCount))
+                workingChunk.priceUsed = workingChunk.buyPrice
               } else {
-                this.partsData[resp[element].itemId].itemTotal = (Number(resp[element].sell.min) * Number(resp[element].finalCount))
+                workingChunk.itemTotal = (Number(workingChunk.sellPrice) * Number(workingChunk.finalCount))
+                workingChunk.priceUsed = workingChunk.sellPrice
               }
-              console.dir(resp[element])
-              console.dir(this.partsData)
+              // console.dir(resp[element])
+              // console.dir(this.partsData)
             }
             this.price = this.totalCost()
           })
