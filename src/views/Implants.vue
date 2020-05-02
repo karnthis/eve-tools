@@ -5,17 +5,17 @@
 </template>
 
 <script>
-  // import ShipHeader from "@/components/ShipHeader";
+// import ShipHeader from "@/components/ShipHeader";
 
-  export default {
-    name: 'Implants',
+export default {
+  name: 'Implants',
 
-    components: {
-      // ShipHeader,
-    },
+  components: {
+    // ShipHeader,
+  },
 
-    data: () => ({
-      //
-    }),
-  };
+  data: () => ({
+    //
+  })
+}
 </script>

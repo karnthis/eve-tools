@@ -1,22 +1,22 @@
 <template>
   <container class="t1ammo">
     <h1>Tech I Ammo</h1>
-    <AmmoHeader/>
+    <AmmoHeader />
   </container>
 </template>
 
 <script>
-  import AmmoHeader from "../../components/AmmoHeader";
+import AmmoHeader from '../../components/AmmoHeader'
 
-  export default {
-    name: 'T1Ammo',
+export default {
+  name: 'T1Ammo',
 
-    components: {
-      AmmoHeader,
-    },
+  components: {
+    AmmoHeader
+  },
 
-    data: () => ({
-      //
-    }),
-  };
+  data: () => ({
+    //
+  })
+}
 </script>

@@ -1,14 +1,14 @@
 <template>
   <div class="modules">
     <h1>Modules</h1>
-    <ModuleHeader/>
+    <ModuleHeader />
   </div>
 </template>
 
 <script>
-  import ModuleHeader from "@/components/ModuleHeader";
+import ModuleHeader from '@/components/ModuleHeader'
 
-  export default {
-    components: {ModuleHeader}
-  }
+export default {
+  components: { ModuleHeader }
+}
 </script>

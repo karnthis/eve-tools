@@ -1,23 +1,22 @@
 <template>
   <container class="reactionsroot">
     <h1>Reactions</h1>
-    <ReactionHeader/>
+    <ReactionHeader />
   </container>
 </template>
 
 <script>
-  import ReactionHeader from "@/components/ReactionHeader";
+import ReactionHeader from '@/components/ReactionHeader'
 
-  export default {
-    name: 'ReactionsRoot',
+export default {
+  name: 'ReactionsRoot',
 
-    components: {
-      ReactionHeader,
-    },
+  components: {
+    ReactionHeader
+  },
 
-    data: () => ({
-      //
-    }),
-  };
+  data: () => ({
+    //
+  })
+}
 </script>
-

@@ -1,22 +1,22 @@
 <template>
   <container class="factionmodules">
     <h1>Faction Modules</h1>
-    <ModuleHeader/>
+    <ModuleHeader />
   </container>
 </template>
 
 <script>
-  import ModuleHeader from "../../components/ModuleHeader";
+import ModuleHeader from '../../components/ModuleHeader'
 
-  export default {
-    name: 'FactionModules',
+export default {
+  name: 'FactionModules',
 
-    components: {
-      ModuleHeader,
-    },
+  components: {
+    ModuleHeader
+  },
 
-    data: () => ({
-      //
-    }),
-  };
+  data: () => ({
+    //
+  })
+}
 </script>

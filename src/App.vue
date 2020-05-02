@@ -1,18 +1,18 @@
 <template>
   <v-app
-          :style="{ backgroundColor }"
+    :style="{ backgroundColor }"
   >
-    <NavigationBar/>
+    <NavigationBar />
     <v-content>
-      <router-view/>
+      <router-view />
     </v-content>
-    <Footer/>
+    <Footer />
   </v-app>
 </template>
 
 <script>
-import NavigationBar from "./components/NavigationBar";
-import Footer from "./components/Footer";
+import NavigationBar from './components/NavigationBar'
+import Footer from './components/Footer'
 
 export default {
   name: 'App',
@@ -24,7 +24,6 @@ export default {
 
   data: () => ({
     backgroundColor: '#a9bad3'
-  }),
-};
+  })
+}
 </script>
-

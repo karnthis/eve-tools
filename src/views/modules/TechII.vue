@@ -1,22 +1,22 @@
 <template>
   <container class="t2modules">
     <h1>Tech II Modules</h1>
-    <ModuleHeader/>
+    <ModuleHeader />
   </container>
 </template>
 
 <script>
-  import ModuleHeader from "@/components/ModuleHeader";
+import ModuleHeader from '@/components/ModuleHeader'
 
-  export default {
-    name: 'T2Modules',
+export default {
+  name: 'T2Modules',
 
-    components: {
-      ModuleHeader,
-    },
+  components: {
+    ModuleHeader
+  },
 
-    data: () => ({
-      //
-    }),
-  };
+  data: () => ({
+    //
+  })
+}
 </script>

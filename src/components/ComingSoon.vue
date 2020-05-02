@@ -1,21 +1,19 @@
 <template>
-    <container class="comingsoon">
-
-    </container>
+  <container class="comingsoon" />
 </template>
 
 <script>
-    // import ModuleHeader from "../../components/ModuleHeader";
+// import ModuleHeader from "../../components/ModuleHeader";
 
-    export default {
-        name: 'ComingSoon',
+export default {
+  name: 'ComingSoon',
 
-        components: {
-            // ModuleHeader,
-        },
+  components: {
+    // ModuleHeader,
+  },
 
-        data: () => ({
-            //
-        }),
-    };
+  data: () => ({
+    //
+  })
+}
 </script>

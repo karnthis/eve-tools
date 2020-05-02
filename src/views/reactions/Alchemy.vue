@@ -1,22 +1,22 @@
 <template>
   <container class="alchemy">
     <h1>Alchemy</h1>
-    <ReactionHeader/>
+    <ReactionHeader />
   </container>
 </template>
 
 <script>
-  import ReactionHeader from "@/components/ReactionHeader";
+import ReactionHeader from '@/components/ReactionHeader'
 
-  export default {
-    name: 'Alchemy',
+export default {
+  name: 'Alchemy',
 
-    components: {
-      ReactionHeader,
-    },
+  components: {
+    ReactionHeader
+  },
 
-    data: () => ({
-      //
-    }),
-  };
+  data: () => ({
+    //
+  })
+}
 </script>
