@@ -3,22 +3,22 @@
     <v-row>
       <v-spacer />
       <v-btn
-        to="/reactions/alchemy"
+        to="/modules/tech1"
         text
       >
-        <span class="mr-2">Alchemy</span>
+        <span class="mr-2">Tech I</span>
       </v-btn>
       <v-btn
-        to="/reactions/fuel"
+        to="/modules/tech2"
         text
       >
-        <span class="mr-2">Fuel</span>
+        <span class="mr-2">Tech II</span>
       </v-btn>
       <v-btn
-        to="/reactions/reactions"
+        to="/modules/faction"
         text
       >
-        <span class="mr-2">Reactions</span>
+        <span class="mr-2">Faction</span>
       </v-btn>
       <v-spacer />
     </v-row>
@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'ReactionHeader',
+  name: 'ModuleHeader',
 
   data: () => ({})
 }

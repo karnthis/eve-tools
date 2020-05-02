@@ -1,6 +1,6 @@
 <template>
-  <container class="t2ships">
-    <h1>Tech II Ships</h1>
+  <container class="factionships">
+    <h1>Faction Ships</h1>
     <ShipHeader />
   </container>
 </template>
@@ -9,7 +9,7 @@
 import ShipHeader from '@/components/ShipHeader'
 
 export default {
-  name: 'T2Ships',
+  name: 'FactionShips',
 
   components: {
     ShipHeader

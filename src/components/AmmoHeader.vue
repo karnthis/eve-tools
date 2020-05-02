@@ -6,19 +6,13 @@
         to="/reactions/alchemy"
         text
       >
-        <span class="mr-2">Alchemy</span>
+        <span class="mr-2">Tech I</span>
       </v-btn>
       <v-btn
         to="/reactions/fuel"
         text
       >
-        <span class="mr-2">Fuel</span>
-      </v-btn>
-      <v-btn
-        to="/reactions/reactions"
-        text
-      >
-        <span class="mr-2">Reactions</span>
+        <span class="mr-2">Tech II</span>
       </v-btn>
       <v-spacer />
     </v-row>
@@ -27,7 +21,7 @@
 
 <script>
 export default {
-  name: 'ReactionHeader',
+  name: 'AmmoHeader',
 
   data: () => ({})
 }

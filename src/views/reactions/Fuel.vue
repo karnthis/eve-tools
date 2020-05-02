@@ -1,38 +1,55 @@
 <template>
   <v-container class="reactions">
     <h1>Fuel</h1>
-    <ReactionHeader/>
+    <ReactionHeader />
     <v-row>
-      <v-col cols="12" sm="12" md="6">
+      <v-col
+        cols="12"
+        sm="12"
+        md="6"
+      >
         <v-form
           ref="form"
-          v-model="valid">
+          v-model="valid"
+        >
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12" md="4">
+              <v-col
+                cols="12"
+                sm="12"
+                md="4"
+              >
                 <v-text-field
                   v-model="fuelCount"
                   :rules="fuelCountRules"
                   label="Desired Fuel Count"
                   filled
                   required
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="12" sm="12" md="4">
+              <v-col
+                cols="12"
+                sm="12"
+                md="4"
+              >
                 <v-select
                   v-model="selectedIsotope"
-                  :items="isotopes"
+                  :items="isotopes.map(item => item.name)"
                   :rules="isotopeRules"
                   label="Isotope"
                   filled
                   required
-                ></v-select>
+                />
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="12" sm="12" md="2">
+              <v-col
+                cols="12"
+                sm="12"
+                md="2"
+              >
                 <v-select
                   v-model="selectedMaterialEfficiency"
                   :items="materialEfficiencyOptions"
@@ -40,9 +57,13 @@
                   label="ME"
                   filled
                   required
-                ></v-select>
+                />
               </v-col>
-              <v-col cols="12" sm="12" md="2">
+              <v-col
+                cols="12"
+                sm="12"
+                md="2"
+              >
                 <v-select
                   v-model="selectedTimeEfficiency"
                   :items="timeEfficiencyOptions"
@@ -50,7 +71,7 @@
                   label="TE"
                   filled
                   required
-                ></v-select>
+                />
               </v-col>
             </v-row>
             <v-row>
@@ -58,13 +79,15 @@
                 :disabled="!valid"
                 color="success"
                 class="mr-4"
-                @click="processForm">
+                @click="processForm"
+              >
                 Process
               </v-btn>
               <v-btn
                 color="error"
                 class="mr-4"
-                @click="reset">
+                @click="reset"
+              >
                 Reset Form
               </v-btn>
             </v-row>
@@ -72,283 +95,283 @@
         </v-form>
       </v-col>
 
-      <v-col>
-        <v-container v-for="item in partsData" :key="item.id">
-          <v-row>
-            {{ item.name }} : {{ beautifyNumber(item.finalCount) }}
-          </v-row>
-          <v-row>
-            Price Per : {{ beautifyNumber(item.priceUsed) }}
-          </v-row>
-          <v-row>
-            <v-switch
-                    v-model="item.useBuy"
-                    :label="`Use Buy Price: ${item.useBuy.toString()}`"
-            ></v-switch>
-          </v-row>
+      <v-col class="outputs">
+        <v-container
+          v-for="item in respObject"
+          :key="item.id"
+        >
+          <div>
+            <v-row>
+              {{ item.name }} : {{ beautifyNumber(item.finalCount) }}
+            </v-row>
+            <v-row>
+              Price Per / Total : {{ beautifyNumber(item.priceUsed, 2) }} / {{ beautifyNumber(item.itemTotal, 2) }}
+            </v-row>
+            <v-row>
+<!--              <v-switch-->
+<!--                v-model="item.useBuy"-->
+<!--                :label="`Use Buy Price: ${item.useBuy.toString()}`"-->
+<!--              />-->
+            </v-row>
+          </div>
         </v-container>
         <v-container>
           <v-row>
-            Total Run Time : {{ calculatedRunTime }}
+            Total Run Time : {{ beautifyTime(calculatedRunTime) }}
           </v-row>
           <v-row>
-            Total Cost : {{ beautifyNumber(price) }}
+            Total Cost : {{ beautifyNumber(price, 2) }}
           </v-row>
           <v-row>
             Actual Units : {{ beautifyNumber(actualUnits) }}
           </v-row>
         </v-container>
       </v-col>
-
     </v-row>
   </v-container>
 </template>
 
 <script>
-  // @ is an alias to /src
-  import ReactionHeader from '@/components/ReactionHeader.vue'
+// @ is an alias to /src
+import ReactionHeader from '@/components/ReactionHeader.vue'
 
-  export default {
-    name: 'Fuel',
-    components: {
-      ReactionHeader
+export default {
+  name: 'Fuel',
+  components: {
+    ReactionHeader
+  },
+  data: () => ({
+    price: null,
+    valid: false,
+    fuelCount: null,
+    fuelAdjusted: null,
+    fuelCountRules: [
+      value => !!value || 'Target Fuel Count is required',
+      value => Number.isInteger(Number(value)) || 'Target Fuel Count must be a number!'
+    ],
+    selectedIsotope: 'Generic',
+    isotopeRules: [
+      value => !!value || 'Isotope Type is required'
+    ],
+    isotopes: [
+      {
+        id: 16274,
+        name: 'Helium',
+        baseCount: 450,
+        useBuy: true
+      },
+      {
+        id: 17889,
+        name: 'Hydrogen',
+        baseCount: 450,
+        useBuy: true
+      },
+      {
+        id: 17888,
+        name: 'Nitrogen',
+        baseCount: 450,
+        useBuy: true
+      },
+      {
+        id: 17887,
+        name: 'Oxygen',
+        baseCount: 450,
+        useBuy: true
+      }
+    ],
+    partsData: [
+      {
+        id: 9848,
+        name: 'Robotics',
+        baseCount: 1,
+        useBuy: true
+      },
+      {
+        id: 44,
+        name: 'Enriched Uranium',
+        baseCount: 4,
+        useBuy: true
+      },
+      {
+        id: 3689,
+        name: 'Mechanical Parts',
+        baseCount: 4,
+        useBuy: true
+      },
+      {
+        id: 9832,
+        name: 'Coolant',
+        baseCount: 9,
+        useBuy: true
+      },
+      {
+        id: 16275,
+        name: 'Strontium Clathrates',
+        baseCount: 20,
+        useBuy: true
+      },
+      {
+        id: 3683,
+        name: 'Oxygen',
+        baseCount: 22,
+        useBuy: true
+      },
+      {
+        id: 16272,
+        name: 'Heavy Water',
+        baseCount: 170,
+        useBuy: true
+      },
+      {
+        id: 16273,
+        name: 'Liquid Ozone',
+        baseCount: 350,
+        useBuy: true
+      },
+      {
+        id: null,
+        name: 'Isotopes',
+        baseCount: 450,
+        useBuy: true
+      }
+    ],
+    selectedMaterialEfficiency: null,
+    materialEfficiencyRules: [
+      value => Number.isInteger(Number(value)) || 'ME is required'
+    ],
+    materialEfficiencyOptions: [
+      ...Array(11).keys()
+    ],
+    selectedTimeEfficiency: null,
+    timeEfficiencyRules: [
+      value => Number.isInteger(Number(value)) || 'TE is required'
+    ],
+    timeEfficiencyOptions: [
+      ...Array(11).keys()
+    ].map(timeEffNum => timeEffNum * 2),
+    calculatedRunTime: null,
+    baseRunTime: 900, // 15 minutes in seconds
+    actualUnits: null,
+    respObject: {}
+  }),
+  computed: {
+
+  },
+  methods: {
+    validate () {
+      return this.$refs.form.validate()
     },
-    data: () => ({
-      price: 'disregard',
-      valid: false,
-      fuelCount: null,
-      fuelAdjusted: null,
-      fuelCountRules: [
-        v => !!v || 'Target Fuel Count is required',
-        v => Number.isInteger(Number(v)) || 'Target Fuel Count must be a number!'
-      ],
-      selectedIsotope: 'Generic',
-      isotopeRules: [
-        v => !!v || 'Isotope Type is required',
-      ],
-      isotopes: [
-        'Helium',
-        'Hydrogen',
-        'Nitrogen',
-        'Oxygen',
-      ],
-      partsData: {
-        9848: {
-          name: 'Robotics',
-          baseCount: 1,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-        44: {
-          name: 'Enriched Uranium',
-          baseCount: 4,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-        3689: {
-          name: 'Mechanical Parts',
-          baseCount: 4,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-        9832: {
-          name: 'Coolant',
-          baseCount: 9,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-        16275: {
-          name: 'Strontium Clathrates',
-          baseCount: 20,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-        3683: {
-          name: 'Oxygen',
-          baseCount: 22,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-        16272: {
-          name: 'Heavy Water',
-          baseCount: 170,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-        16273: {
-          name: 'Liquid Ozone',
-          baseCount: 350,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-        A: {
-          name: 'Isotopes',
-          baseCount: 450,
-          finalCount: null,
-          buyPrice: null,
-          sellPrice: null,
-          priceUsed: null,
-          itemTotal: null,
-          useBuy: true,
-        },
-      },
-      selectedMaterialEfficiency: null,
-      materialEfficiencyRules: [
-        v => Number.isInteger(Number(v)) || 'ME is required',
-      ],
-      materialEfficiencyOptions: [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10
-      ],
-      selectedTimeEfficiency: null,
-      timeEfficiencyRules: [
-        v => Number.isInteger(Number(v)) || 'TE is required',
-      ],
-      timeEfficiencyOptions: [
-        0,
-        2,
-        4,
-        6,
-        8,
-        10,
-        12,
-        14,
-        16,
-        18,
-        20
-      ],
-      calculatedRunTime: null,
-      baseRunTime: 900, // 15 minutes in seconds
-      actualUnits: null,
-    }),
-    computed: {
-
+    reset () {
+      this.$refs.form.reset()
     },
-    methods: {
-      validate () {
-        return this.$refs.form.validate()
-      },
-      reset () {
-        this.$refs.form.reset()
-      },
-      // resetValidation () {
-      //   this.$refs.form.resetValidation()
-      // },
-      totalCost: function() {
-        const {A, ...toUse} = this.partsData
-        console.log(A)
-        const myData = Object.values(toUse)
-        console.dir(myData)
-        // myData[0];
-        const myResult = myData.reduce((prev, curr) =>{
-          return prev + Number(curr.itemTotal)
-        }, 0)
-        // console.log(myResult)
-        return myResult
-      },
-      processForm() {
-        if (this.validate()) {
-          const fuelAdjusted = Math.ceil(this.fuelCount / 40)
-
-          Object.keys(this.partsData).forEach(key => {
-            this.partsData[key].finalCount = (Math.ceil((fuelAdjusted * this.partsData[key].baseCount) * this.getPercentage(this.selectedMaterialEfficiency)))
-          })
-          this.calculatedRunTime = this.beautifyTime(Math.ceil((fuelAdjusted * this.baseRunTime) * this.getPercentage(this.selectedTimeEfficiency)))
-          this.actualUnits = 40 * fuelAdjusted
-          this.fetchPrices(Object.keys(this.partsData), 30000142)
-          .then((resp) => {
-            for (const element in resp) {
-              const workingChunk = this.partsData[resp[element].itemId]
-              workingChunk.buyPrice = resp[element].buy.max
-              workingChunk.sellPrice = resp[element].sell.min
-              console.dir('workingChunk')
-              console.dir(workingChunk)
-              console.dir('resp[element]')
-              console.dir(resp[element])
-              console.dir(typeof workingChunk.useBuy)
-              if (workingChunk.useBuy) {
-                workingChunk.itemTotal = (Number(workingChunk.buyPrice) * Number(workingChunk.finalCount))
-                workingChunk.priceUsed = workingChunk.buyPrice
-              } else {
-                workingChunk.itemTotal = (Number(workingChunk.sellPrice) * Number(workingChunk.finalCount))
-                workingChunk.priceUsed = workingChunk.sellPrice
-              }
-              // console.dir(resp[element])
-              // console.dir(this.partsData)
+    // resetValidation () {
+    //   this.$refs.form.resetValidation()
+    // },
+    calculateTotalCost: function (toCalculate) {
+      return Object.values(toCalculate).map(item => item.itemTotal).reduce((prev, curr) => {
+        return prev + curr
+      }, 0)
+    },
+    fullItemArray (currentIsotope) {
+      return [...this.partsData.filter(item => !!item.id ), ...this.isotopes.filter(item => item.name === currentIsotope)]
+    },
+    async fetchAndProcessData(itemIds, fullItemSet) {
+      return await this.fetchPrices(itemIds, 30000142)
+      .then((resp) => {
+        const respObject = {}
+        for (const item of resp) {
+          console.log(item)
+          let completeItem = {}
+          for (const localItem of fullItemSet) {
+            if (localItem.id === item.itemId) {
+              completeItem = { ...localItem }
+              completeItem.buyPrice = item.buy.max
+              completeItem.sellPrice = item.sell.min
+              break
+            } else {
+              continue
             }
-            this.price = this.totalCost()
-          })
+          }
+          respObject[completeItem.id] = completeItem
         }
-      },
-      async fetchPrices(itemIdArray, marketSystem) {
-        const key = 6
-        const url = `https://api.squirrellogic.com/marketer/${marketSystem}/?key=${key}`
-        const data = await fetch(url, {
-          method: 'POST',
-          mode: 'cors',
-          body: JSON.stringify({itemIdArray})
+        return respObject
+      })
+    },
+    calculateTotals(toCalculate, fuelAdjusted) {
+      for (const item in toCalculate) {
+        const workingItem = toCalculate[item]
+        workingItem.finalCount = Math.ceil(workingItem.baseCount * fuelAdjusted * this.getPercentage(this.selectedMaterialEfficiency))
+        if (workingItem.finalCount < fuelAdjusted) {
+          workingItem.finalCount = fuelAdjusted
+        } else {
+          // Do Nothing
+        }
+        workingItem.priceUsed = (workingItem.useBuy) ? workingItem.buyPrice : workingItem.sellPrice
+        console.log(workingItem)
+        workingItem.itemTotal = workingItem.finalCount * workingItem.priceUsed
+      }
+      return toCalculate
+    },
+    processForm () {
+      if (this.validate()) {
+        const fuelAdjusted = Math.ceil(this.fuelCount / 40)
+        this.actualUnits = fuelAdjusted * 40
+        console.log(fuelAdjusted)
+        const fullItemSet = this.fullItemArray(this.selectedIsotope)
+        const itemIds = fullItemSet.map(item => item.id)
+        console.log(itemIds)
+
+        this.calculatedRunTime = Math.ceil((fuelAdjusted * this.baseRunTime) * this.getPercentage(this.selectedTimeEfficiency))
+
+        this.fetchAndProcessData(itemIds, fullItemSet)
+        .then((resp) => {
+          this.respObject = this.calculateTotals(resp, fuelAdjusted)
+          this.price = this.calculateTotalCost(this.respObject)
+
         })
+      }
+    },
+
+    async fetchPrices (itemIdArray, marketSystem) {
+      const key = 6
+      const url = `https://api.squirrellogic.com/marketer/${marketSystem}/?key=${key}`
+      const data = await fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({ itemIdArray })
+      })
         .then(resp => resp.json())
-        // .then(resp => {console.dir(resp)})
+        // .then(resp => {console.dir(resp);return resp})
         // .then(resp => resp)
         // console.dir(data)
-        return data
-      },
-      getPercentage(value) {
-        return ((100 - Number(value)) / 100)
-      },
-      beautifyNumber(num) {
-        return new Number(num).toLocaleString('en-US', {minimumFractionDigits: 0})
-      },
-      beautifyTime(time) {
-        const days = ~~(time / 86400)
-        const hours = ~~((time % 86400) / 3600)
-        const minutes = ~~((time % 3600) / 60)
-        const seconds = ~~(time % 60)
-
-        return `${days}:${hours}:${minutes}:${seconds}`
-      },
+      return data
     },
+    getPercentage (value) {
+      return ((100 - Number(value)) / 100)
+    },
+    beautifyNumber (num, places) {
+      return new Number(num).toLocaleString('en-US', { minimumFractionDigits: places || 0 })
+    },
+    beautifyTime (time) {
+      const days = ~~(time / 86400)
+      const hours = ~~((time % 86400) / 3600)
+      const minutes = ~~((time % 3600) / 60)
+      const seconds = ~~(time % 60)
+
+      return `${days}:${hours}:${minutes}:${seconds}`
+    }
   }
+}
 </script>
+
+<style scoped>
+  .outputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+  }
+  .outputs div {
+    /*todo*/
+  }
+
+</style>

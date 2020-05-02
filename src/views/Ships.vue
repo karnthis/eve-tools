@@ -1,23 +1,22 @@
 <template>
   <container class="ships">
     <h1>Ships</h1>
-    <ShipHeader/>
+    <ShipHeader />
   </container>
 </template>
 
 <script>
-  import ShipHeader from "@/components/ShipHeader";
+import ShipHeader from '@/components/ShipHeader'
 
-  export default {
-    name: 'App',
+export default {
+  name: 'App',
 
-    components: {
-      ShipHeader,
-    },
+  components: {
+    ShipHeader
+  },
 
-    data: () => ({
-      //
-    }),
-  };
+  data: () => ({
+    //
+  })
+}
 </script>
-
