@@ -30,6 +30,9 @@
         <v-btn to="/ammo" text>
             <span class="mr-2">Ammo</span>
         </v-btn>
+        <v-btn to="/implants" text>
+            <span class="mr-2">Implants</span>
+        </v-btn>
         <v-btn to="/modules" text>
             <span class="mr-2">Modules</span>
         </v-btn>

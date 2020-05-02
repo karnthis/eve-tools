@@ -16,12 +16,20 @@ Vue.use(VueRouter)
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    meta: {
+      title: 'my title', auth: false
+    }
   },
     {
       path: '/ships',
       name: 'Ships',
       component: () => import(/* webpackChunkName: "about" */ '../views/Ships.vue')
+    },
+    {
+      path: '/ships/faction',
+      name: 'FactionShips',
+      component: () => import(/* webpackChunkName: "about" */ '../views/ships/Faction.vue')
     },
     {
       path: '/ships/tech1',
@@ -42,6 +50,21 @@ Vue.use(VueRouter)
       path: '/ammo',
       name: 'Ammo',
       component: () => import(/* webpackChunkName: "about" */ '../views/Ammo.vue')
+    },
+    {
+      path: '/ammo/tech1',
+      name: 'T1Ammo',
+      component: () => import(/* webpackChunkName: "about" */ '../views/ammo/TechI.vue')
+    },
+    {
+      path: '/ammo/tech2',
+      name: 'T2Ammo',
+      component: () => import(/* webpackChunkName: "about" */ '../views/ammo/TechII.vue')
+    },
+    {
+      path: '/implants',
+      name: 'Implants',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Implants.vue')
     },
     {
       path: '/reactions',
@@ -67,7 +90,22 @@ Vue.use(VueRouter)
       path: '/modules',
       name: 'Modules',
       component: () => import(/* webpackChunkName: "about" */ '../views/Modules.vue')
-    }
+    },
+    {
+      path: '/modules/faction',
+      name: 'FactionModules',
+      component: () => import(/* webpackChunkName: "about" */ '../views/modules/Faction.vue')
+    },
+    {
+      path: '/modules/tech1',
+      name: 'T1Modules',
+      component: () => import(/* webpackChunkName: "about" */ '../views/modules/TechI.vue')
+    },
+    {
+      path: '/modules/tech2',
+      name: 'T2sModules',
+      component: () => import(/* webpackChunkName: "about" */ '../views/modules/TechII.vue')
+    },
 ]
 
 const router = new VueRouter({

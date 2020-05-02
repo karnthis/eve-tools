@@ -1,5 +1,7 @@
 <template>
-  <v-app>
+  <v-app
+          :style="{ backgroundColor }"
+  >
     <NavigationBar/>
     <v-content>
       <router-view/>
@@ -21,11 +23,8 @@ export default {
   },
 
   data: () => ({
-    //
+    backgroundColor: '#a9bad3'
   }),
 };
 </script>
 
-<style scoped>
-
-</style>
